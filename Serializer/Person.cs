@@ -14,12 +14,16 @@ namespace Serializer
     [Serializable()]
     public class Person
     {
-        public static int personCounter = FindLastPersonCount();
         public String Name { get; }
         public String Address { get; }
         public String Phone { get; }
         public DateTime Recorded { get; }
-        [NonSerialized()] public int serial;
+        [NonSerialized()] private int serial;
+        public int Serial
+        {
+            get { return serial; }
+            set { serial = value; }
+        }
 
         public Person(string name, string address, string phone)
         {
@@ -29,13 +33,40 @@ namespace Serializer
             Recorded = DateTime.Now;
         }
 
+        public static Person GetPersonBySerialNum(int serialNum)
+        {
+            string strSerial = "";
+            if (serialNum <= 9)
+            {
+                strSerial = "0" + serialNum.ToString();
+            }
+            else
+            {
+                strSerial = serialNum.ToString();
+            }
+            string[] files = Directory.GetFiles(@".\");
+            Person person = null;
+            foreach (string item in files)
+            {
+                if (Regex.IsMatch(item, @"(Person)"))
+                {
+                    string numberString = Regex.Match(item, @"\d+").Value;
+                    if (numberString.Equals(strSerial))
+                    {
+                        person = Deserialize(item);
+                    }
+                }
+            }
+            return person;
+        }
+
         public static int FindLastPersonCount()
         {
-            int lastCount = 0;
+            int lastCount = -1;
             string[] files = Directory.GetFiles(@".\");
             foreach (string item in files)
             {
-                if(Regex.IsMatch(item, @"(Person)"))
+                if (Regex.IsMatch(item, @"(Person)"))
                 {
                     string numberString = Regex.Match(item, @"\d+").Value;
                     int number = Int16.Parse(numberString);
@@ -44,7 +75,7 @@ namespace Serializer
                         lastCount = number;
                     }
                 }
-            }
+            }            
             return lastCount;
         }
 
@@ -68,24 +99,52 @@ namespace Serializer
             return firstCount;
         }
 
-        public void Serialize()
+        public void Serialize(string lblNum)
         {
-            if (personCounter <= 99)
+            int number = 0;
+            if (!String.IsNullOrEmpty(lblNum))
             {
-                string output = "Person" + personCounter.ToString() + ".dat";
+                number = Int16.Parse(lblNum);
+            }
+            else
+            {
+                number = FindLastPersonCount() + 1;
+            }
+            if (number <= 99)
+            {
+                string output = "";
+                if (number <= 9)
+                {
+                    output = "Person0" + number.ToString() + ".dat";
+                }
+                else
+                {
+                    output = "Person" + number.ToString() + ".dat";
+                }
                 IFormatter formatter = new BinaryFormatter();
                 Stream stream = new FileStream(output,
                                          FileMode.Create,
                                          FileAccess.Write, FileShare.None);
-                this.serial = personCounter;
                 formatter.Serialize(stream, this);
                 stream.Close();
-                personCounter++;
             }
             else
             {
                 MessageBox.Show("Too many person");
             }
+        }
+
+        public static Person Deserialize(string input)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream(input,
+                                      FileMode.Open,
+                                      FileAccess.Read,
+                                      FileShare.Read);
+            Person person = (Person)formatter.Deserialize(stream);
+            stream.Close();
+            person.Serial = Int16.Parse(Regex.Match(input, @"\d+").Value);
+            return person;
         }
     }
 }
