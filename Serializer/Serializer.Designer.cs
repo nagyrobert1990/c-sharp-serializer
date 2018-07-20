@@ -41,6 +41,7 @@
             this.btnLast = new System.Windows.Forms.Button();
             this.lblCounter = new System.Windows.Forms.Label();
             this.btnNew = new System.Windows.Forms.Button();
+            this.lblDate = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblName
@@ -146,9 +147,8 @@
             this.lblCounter.AutoSize = true;
             this.lblCounter.Location = new System.Drawing.Point(213, 13);
             this.lblCounter.Name = "lblCounter";
-            this.lblCounter.Size = new System.Drawing.Size(35, 13);
+            this.lblCounter.Size = new System.Drawing.Size(0, 13);
             this.lblCounter.TabIndex = 11;
-            this.lblCounter.Text = "label1";
             this.lblCounter.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // btnNew
@@ -161,11 +161,21 @@
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.BtnNew_Click);
             // 
+            // lblDate
+            // 
+            this.lblDate.AutoSize = true;
+            this.lblDate.Location = new System.Drawing.Point(75, 13);
+            this.lblDate.Name = "lblDate";
+            this.lblDate.Size = new System.Drawing.Size(0, 13);
+            this.lblDate.TabIndex = 13;
+            this.lblDate.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // Serializer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(258, 217);
+            this.Controls.Add(this.lblDate);
             this.Controls.Add(this.btnNew);
             this.Controls.Add(this.lblCounter);
             this.Controls.Add(this.btnLast);
@@ -202,6 +212,7 @@
         private System.Windows.Forms.Button btnLast;
         private System.Windows.Forms.Label lblCounter;
         private System.Windows.Forms.Button btnNew;
+        private System.Windows.Forms.Label lblDate;
     }
 }
 

@@ -27,6 +27,7 @@ namespace Serializer
             txtPhone.Text = person.Phone;
             personCounter = person.Serial;
             lblCounter.Text = $"Serial: {personCounter}";
+            lblDate.Text = $"Recorded: {person.Recorded.Year}. {person.Recorded.Month}. {person.Recorded.Day}.";
         }
 
         private void NewPerson()
@@ -35,6 +36,7 @@ namespace Serializer
             txtAddress.Text = String.Empty;
             txtPhone.Text = String.Empty;
             lblCounter.Text = String.Empty;
+            lblDate.Text = String.Empty;
         }
 
         private void Serializer_Load(object sender, EventArgs e)
